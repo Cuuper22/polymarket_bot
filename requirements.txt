@@ -1,0 +1,51 @@
+# Polymarket API
+py-clob-client>=0.34.0
+web3>=6.0.0
+
+# Data & Analysis
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+scikit-learn>=1.3.0
+
+# HTTP & Async
+requests>=2.31.0
+aiohttp>=3.8.0
+httpx>=0.24.0
+
+# News & Sentiment Sources (Free)
+praw>=7.7.0  # Reddit API
+feedparser>=6.0.0  # RSS feeds
+pytrends>=4.9.0  # Google Trends
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# NLP & Sentiment
+textblob>=0.17.0
+vaderSentiment>=3.3.0
+transformers>=4.30.0  # For better sentiment (optional, heavy)
+
+# Scheduling & Async
+schedule>=1.2.0
+apscheduler>=3.10.0
+
+# Visualization & Monitoring
+plotly>=5.15.0
+dash>=2.11.0
+rich>=13.4.0  # Console output
+
+# Database
+sqlalchemy>=2.0.0
+sqlite3  # Built-in
+
+# Environment & Config
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# Logging
+loguru>=0.7.0

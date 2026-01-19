@@ -1,0 +1,68 @@
+# ============================================================
+# POLYMARKET BOT - BUILD DEPENDENCIES
+# ============================================================
+# Install with: pip install -r requirements-build.txt
+
+# Core runtime dependencies (from requirements.txt)
+-r requirements.txt
+
+# ============================================================
+# PYINSTALLER
+# ============================================================
+pyinstaller>=6.0.0
+pyinstaller-hooks-contrib>=2024.0
+
+# ============================================================
+# WINDOWS GUI & SYSTEM TRAY
+# ============================================================
+pywin32>=306
+pystray>=0.19.0
+Pillow>=10.0.0
+
+# ============================================================
+# ENCRYPTION (for secure config storage)
+# ============================================================
+cryptography>=41.0.0
+
+# ============================================================
+# WEB DASHBOARD (FastAPI + Uvicorn)
+# ============================================================
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+websockets>=11.0
+python-multipart>=0.0.6
+jinja2>=3.1.0
+
+# ============================================================
+# ADDITIONAL UTILITIES
+# ============================================================
+psutil>=5.9.0           # System monitoring
+watchdog>=3.0.0         # File system watching
+click>=8.1.0            # CLI enhancement (optional)
+
+# ============================================================
+# DEVELOPMENT TOOLS (optional, not needed for build)
+# ============================================================
+# black>=23.0.0
+# ruff>=0.0.280
+# mypy>=1.5.0
+# pytest>=7.4.0
+
+# ============================================================
+# NOTES
+# ============================================================
+# 
+# External tools needed (download separately):
+#
+# 1. UPX Compression (optional, reduces exe size by ~40%)
+#    Download: https://github.com/upx/upx/releases
+#    Add to PATH or place upx.exe in project root
+#
+# 2. Inno Setup (for creating Windows installer)
+#    Download: https://jrsoftware.org/isinfo.php
+#    Default install: C:\Program Files (x86)\Inno Setup 6\
+#
+# 3. Node.js (for React dashboard build)
+#    Download: https://nodejs.org/
+#    Run: npm install && npm run build in dashboard-ui/
+#

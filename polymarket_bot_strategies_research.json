@@ -1,0 +1,379 @@
+{
+  "research_summary": {
+    "date": "2026-01-17",
+    "scope": "Polymarket prediction market bot strategies, data sources, and risk parameters",
+    "capital_amount": 75,
+    "currency": "USD"
+  },
+  
+  "top_5_strategies": [
+    {
+      "rank": 1,
+      "name": "Copy Trading / Whale Following",
+      "description": "Track and replicate trades of consistently profitable wallets on Polymarket. Monitor high-PnL addresses and mirror their positions with a slight delay.",
+      "alpha_source": "Information asymmetry from expert traders",
+      "proven_implementations": [
+        "terauss/Polymarket-Copy-Trading-Bot (1,500+ stars)",
+        "vladmeer/polymarket-copy-trading-bot (892 stars)",
+        "earthskyorg/Polymarket-Copy-Trading-Bot (582 stars)"
+      ],
+      "technical_requirements": {
+        "api_type": "CLOB REST + WebSocket",
+        "latency_sensitivity": "Medium (seconds acceptable)",
+        "data_sources": ["Polymarket Data API", "Polygon blockchain explorer"]
+      },
+      "success_rate_estimate": "55-65%",
+      "suitable_for_small_capital": true,
+      "edge_type": "Following smart money",
+      "capital_efficiency": "HIGH"
+    },
+    {
+      "rank": 2,
+      "name": "Cross-Platform Arbitrage (Polymarket-Kalshi)",
+      "description": "Exploit price discrepancies between Polymarket and regulated prediction market Kalshi on identical or highly correlated events.",
+      "alpha_source": "Market inefficiency across fragmented platforms",
+      "proven_implementations": [
+        "terauss/Polymarket-Kalshi-Arbitrage-bot (625 stars)",
+        "vladmeer/polymarket-arbitrage-bot (457 stars)",
+        "soulcrancerdev/polymarket-kalshi-copy-trading-arbitrage-bot (304 stars)"
+      ],
+      "technical_requirements": {
+        "api_type": "Multi-platform API integration",
+        "latency_sensitivity": "High (sub-second preferred)",
+        "data_sources": ["Polymarket CLOB API", "Kalshi API", "Event matching engine"]
+      },
+      "success_rate_estimate": "70-80% when opportunities exist",
+      "suitable_for_small_capital": false,
+      "edge_type": "Pure arbitrage",
+      "capital_efficiency": "MEDIUM",
+      "note": "Requires capital on multiple platforms; opportunities increasingly rare"
+    },
+    {
+      "rank": 3,
+      "name": "Market Making / Liquidity Provision",
+      "description": "Post two-sided limit orders to capture bid-ask spread and earn Polymarket liquidity rewards. Focus on high-volume markets within reward parameters.",
+      "alpha_source": "Spread capture + USDC liquidity rewards",
+      "proven_implementations": [
+        "Polymarket/py-clob-client (675 stars) - official Python client",
+        "Polymarket/examples (57 stars) - official examples"
+      ],
+      "technical_requirements": {
+        "api_type": "CLOB REST + WebSocket (market channel)",
+        "latency_sensitivity": "High",
+        "data_sources": ["Polymarket CLOB orderbook", "WebSocket price feeds"]
+      },
+      "reward_parameters": {
+        "min_size": "Variable per market (rewardsMinSize field)",
+        "max_spread": "Variable per market (rewardsMaxSpread field)",
+        "scoring": "Quadratic function favoring tighter spreads"
+      },
+      "success_rate_estimate": "60-75%",
+      "suitable_for_small_capital": true,
+      "edge_type": "Spread capture + rewards",
+      "capital_efficiency": "MEDIUM"
+    },
+    {
+      "rank": 4,
+      "name": "15-Minute BTC Price Arbitrage",
+      "description": "Trade Polymarket's crypto price prediction markets (15-min BTC above/below thresholds) using real-time price feeds from Pyth Network and external exchanges.",
+      "alpha_source": "Faster price data than market consensus",
+      "proven_implementations": [
+        "terauss/Polymarket-trading-bot-15min-BTC (457 stars)"
+      ],
+      "technical_requirements": {
+        "api_type": "CLOB REST + Real-time crypto feeds",
+        "latency_sensitivity": "Very High (milliseconds matter)",
+        "data_sources": ["Pyth Network", "Binance/Coinbase WebSocket", "Polymarket RTDS"]
+      },
+      "success_rate_estimate": "50-60%",
+      "suitable_for_small_capital": true,
+      "edge_type": "Information speed advantage",
+      "capital_efficiency": "HIGH"
+    },
+    {
+      "rank": 5,
+      "name": "News/Event-Driven Trading",
+      "description": "Monitor breaking news, social media, and official announcements to trade ahead of market price adjustments on political/sports/news events.",
+      "alpha_source": "Faster information processing",
+      "proven_implementations": [
+        "Various custom implementations using LLM parsing"
+      ],
+      "technical_requirements": {
+        "api_type": "CLOB REST + External news APIs",
+        "latency_sensitivity": "Very High",
+        "data_sources": ["Twitter/X API", "Google News", "RSS feeds", "AP/Reuters", "Official government sources"]
+      },
+      "success_rate_estimate": "55-70%",
+      "suitable_for_small_capital": true,
+      "edge_type": "Information edge",
+      "capital_efficiency": "HIGH"
+    }
+  ],
+  
+  "free_data_sources": {
+    "polymarket_official": [
+      {
+        "name": "Gamma Markets API",
+        "endpoint": "https://gamma-api.polymarket.com/markets",
+        "data_type": "Market metadata, prices, volumes, events",
+        "rate_limit": "Generous for read operations",
+        "auth_required": false,
+        "cost": "FREE"
+      },
+      {
+        "name": "CLOB REST API",
+        "endpoint": "https://clob.polymarket.com",
+        "data_type": "Orderbook, trades, market prices, midpoints",
+        "rate_limit": "Tiered by authentication level",
+        "auth_required": "Read-only: No | Trading: Yes",
+        "cost": "FREE"
+      },
+      {
+        "name": "CLOB WebSocket",
+        "endpoint": "wss://ws-subscriptions-clob.polymarket.com/ws",
+        "data_type": "Real-time orderbook updates, trades, user events",
+        "rate_limit": "Connection-based",
+        "auth_required": "Market channel: No | User channel: Yes",
+        "cost": "FREE"
+      },
+      {
+        "name": "Real-Time Data Stream (RTDS)",
+        "endpoint": "wss://rtds.polymarket.com",
+        "data_type": "Crypto prices, comments, live updates",
+        "rate_limit": "Subscription-based",
+        "auth_required": false,
+        "cost": "FREE"
+      },
+      {
+        "name": "Data API",
+        "endpoint": "https://data-api.polymarket.com",
+        "data_type": "Historical data, builder stats, analytics",
+        "rate_limit": "Standard",
+        "auth_required": false,
+        "cost": "FREE"
+      }
+    ],
+    "external_price_feeds": [
+      {
+        "name": "Pyth Network",
+        "endpoint": "https://hermes.pyth.network",
+        "data_type": "Real-time crypto/equities/forex prices",
+        "use_case": "BTC/crypto price prediction markets",
+        "cost": "FREE (on-chain updates require gas)"
+      },
+      {
+        "name": "CoinGecko API",
+        "endpoint": "https://api.coingecko.com/api/v3",
+        "data_type": "Crypto prices, market cap, volume",
+        "rate_limit": "30 calls/minute (free tier)",
+        "cost": "FREE (limited)"
+      },
+      {
+        "name": "Binance Public API",
+        "endpoint": "https://api.binance.com/api/v3",
+        "data_type": "Real-time crypto prices, orderbooks",
+        "rate_limit": "1200 requests/minute",
+        "cost": "FREE"
+      }
+    ],
+    "blockchain_data": [
+      {
+        "name": "Polygon RPC (Public)",
+        "endpoint": "https://polygon-rpc.com",
+        "data_type": "On-chain transactions, wallet balances",
+        "use_case": "Whale wallet tracking",
+        "cost": "FREE"
+      },
+      {
+        "name": "Polygonscan API",
+        "endpoint": "https://api.polygonscan.com",
+        "data_type": "Transaction history, token transfers",
+        "rate_limit": "5 calls/second (free)",
+        "cost": "FREE"
+      }
+    ],
+    "news_and_sentiment": [
+      {
+        "name": "Google News RSS",
+        "endpoint": "https://news.google.com/rss",
+        "data_type": "Breaking news headlines",
+        "cost": "FREE"
+      },
+      {
+        "name": "Reddit API",
+        "endpoint": "https://www.reddit.com/r/{subreddit}.json",
+        "data_type": "Community sentiment, discussion",
+        "cost": "FREE"
+      }
+    ]
+  },
+  
+  "success_factors": {
+    "technical": [
+      "WebSocket connectivity for real-time data (sub-second updates)",
+      "Proper API authentication with signature types (0=EOA, 1=Magic, 2=Browser proxy)",
+      "Token allowances set for USDC and Conditional Tokens on Polygon",
+      "Efficient order management (cancel stale orders, manage inventory)",
+      "Error handling for rate limits and network issues"
+    ],
+    "strategic": [
+      "Market selection: Focus on high-volume, high-liquidity markets",
+      "Timing: Trade during high activity periods for better fills",
+      "Position sizing: Never risk more than 2-5% of capital per trade",
+      "Edge identification: Verify your information advantage is real",
+      "Avoid extreme probabilities (<5% or >95%) - low expected value"
+    ],
+    "operational": [
+      "24/7 bot uptime for continuous monitoring",
+      "Logging and monitoring for performance tracking",
+      "Regular strategy backtesting and adjustment",
+      "Gas optimization on Polygon network",
+      "Wallet security (hardware wallet or secure key management)"
+    ]
+  },
+  
+  "risk_parameters_75_usd": {
+    "capital_allocation": {
+      "total_capital": 75.00,
+      "trading_capital": 60.00,
+      "reserve_for_fees_and_gas": 10.00,
+      "emergency_buffer": 5.00
+    },
+    "position_sizing": {
+      "max_position_size_usd": 7.50,
+      "max_position_percentage": "10%",
+      "recommended_position_size_usd": 3.75,
+      "recommended_position_percentage": "5%",
+      "rationale": "Kelly criterion conservative approach for small bankroll"
+    },
+    "risk_limits": {
+      "max_daily_loss_usd": 7.50,
+      "max_daily_loss_percentage": "10%",
+      "max_weekly_loss_usd": 15.00,
+      "max_weekly_loss_percentage": "20%",
+      "max_drawdown_before_pause_usd": 22.50,
+      "max_drawdown_before_pause_percentage": "30%",
+      "stop_loss_per_trade_percentage": "20%"
+    },
+    "trade_parameters": {
+      "min_trade_size_usd": 1.00,
+      "max_concurrent_positions": 5,
+      "min_expected_edge_percentage": 5,
+      "min_probability_range": [0.15, 0.85],
+      "avoid_probabilities_below": 0.05,
+      "avoid_probabilities_above": 0.95
+    },
+    "strategy_recommendations_for_75_usd": [
+      {
+        "strategy": "Copy Trading",
+        "allocation": 30.00,
+        "rationale": "Best risk-adjusted returns for small capital, passive approach"
+      },
+      {
+        "strategy": "15-min BTC Trading",
+        "allocation": 20.00,
+        "rationale": "High frequency, quick resolution, allows compounding"
+      },
+      {
+        "strategy": "News-Driven Manual Trades",
+        "allocation": 10.00,
+        "rationale": "Opportunistic, low competition on niche events"
+      }
+    ],
+    "fee_considerations": {
+      "maker_fee": "0% (rebates available)",
+      "taker_fee": "Variable by market (check takerBaseFee)",
+      "polygon_gas": "~0.01-0.05 MATIC per transaction",
+      "monthly_gas_estimate_usd": 2.00
+    },
+    "expected_outcomes": {
+      "conservative_monthly_return": "5-10%",
+      "realistic_monthly_return": "10-20%",
+      "optimistic_monthly_return": "20-50%",
+      "probability_of_total_loss": "10-20%",
+      "break_even_timeline_months": 3
+    }
+  },
+  
+  "open_source_bot_analysis": {
+    "most_popular_repositories": [
+      {
+        "name": "Polymarket/py-clob-client",
+        "stars": 675,
+        "forks": 263,
+        "type": "Official Python SDK",
+        "features": ["Full CLOB integration", "Order management", "WebSocket support"],
+        "recommended": true
+      },
+      {
+        "name": "terauss/Polymarket-Copy-Trading-Bot",
+        "stars": 1500,
+        "type": "Copy trading implementation",
+        "language": "Python",
+        "features": ["Whale tracking", "Position mirroring", "Risk management"]
+      },
+      {
+        "name": "terauss/Polymarket-Kalshi-Arbitrage-bot",
+        "stars": 625,
+        "type": "Cross-platform arbitrage",
+        "language": "Rust",
+        "features": ["Multi-platform", "Low latency", "Event matching"]
+      }
+    ],
+    "common_patterns": [
+      "Use of py-clob-client as base SDK",
+      "WebSocket for real-time data",
+      "Environment variables for secrets",
+      "Polygon wallet integration via eth-account",
+      "Async/await patterns for performance"
+    ]
+  },
+  
+  "implementation_roadmap": {
+    "phase_1_setup": {
+      "duration": "1-2 days",
+      "tasks": [
+        "Create Polymarket account and deposit USDC",
+        "Set up Python environment with py-clob-client",
+        "Configure token allowances for trading",
+        "Test read-only API access"
+      ]
+    },
+    "phase_2_paper_trading": {
+      "duration": "1-2 weeks",
+      "tasks": [
+        "Implement chosen strategy logic",
+        "Paper trade to validate edge",
+        "Monitor win rate and expected value",
+        "Refine position sizing"
+      ]
+    },
+    "phase_3_live_trading": {
+      "duration": "Ongoing",
+      "tasks": [
+        "Start with minimum position sizes",
+        "Gradually increase based on performance",
+        "Continuous monitoring and adjustment",
+        "Weekly performance review"
+      ]
+    }
+  },
+  
+  "key_api_endpoints": {
+    "markets": "https://gamma-api.polymarket.com/markets",
+    "clob": "https://clob.polymarket.com",
+    "websocket": "wss://ws-subscriptions-clob.polymarket.com/ws/market",
+    "data_api": "https://data-api.polymarket.com",
+    "rtds": "wss://rtds.polymarket.com"
+  },
+  
+  "warnings_and_caveats": [
+    "Geographic restrictions apply - US users face limitations",
+    "Prediction markets carry inherent risk of total loss",
+    "Copy trading success depends on whale selection quality",
+    "Cross-platform arbitrage requires capital on multiple platforms",
+    "Market making requires continuous uptime and inventory management",
+    "Past performance of strategies does not guarantee future results",
+    "Regulatory landscape is evolving rapidly"
+  ]
+}
