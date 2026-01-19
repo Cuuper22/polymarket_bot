@@ -244,6 +244,10 @@ class EdgeAwarePaperTrader:
         if spread > self.config['max_spread']:
             return None
         
+        # Skip extreme probability markets (too risky, false resolution triggers)
+        if price < 0.05 or price > 0.95:
+            return None
+        
         # Calculate edge
         implied_prob = 0.5 + sentiment * 0.4
         implied_prob = max(0.1, min(0.9, implied_prob))
@@ -424,8 +428,9 @@ class EdgeAwarePaperTrader:
             should_close = False
             close_reason = None
             
-            # Resolution (price near 0 or 1)
-            if new_price >= 0.95 or new_price <= 0.05:
+            # Resolution (price very close to 0 or 1 - actual resolution)
+            # Use tight thresholds to avoid false triggers on low-probability markets
+            if new_price >= 0.98 or new_price <= 0.02:
                 should_close = True
                 close_reason = 'resolution'
             # Take profit
@@ -451,11 +456,11 @@ class EdgeAwarePaperTrader:
         shares = position['amount'] / position['entry_price']
         
         # Calculate PnL based on exit type
-        if exit_price >= 0.95:  # Win
+        if exit_price >= 0.98:  # Win (resolved to YES)
             pnl = shares * 1.0 - position['amount']
-        elif exit_price <= 0.05:  # Lose
+        elif exit_price <= 0.02:  # Lose (resolved to NO)
             pnl = -position['amount']
-        else:  # Sold before resolution
+        else:  # Sold before resolution - calculate based on price change
             pnl = shares * exit_price - position['amount']
         
         # Apply Polymarket fee (2% on profits only)
