@@ -47,7 +47,7 @@ logs/
 
 # PyInstaller
 *.manifest
-*.spec
+# Note: .spec files are kept for reproducible builds
 
 # Testing
 .pytest_cache/
