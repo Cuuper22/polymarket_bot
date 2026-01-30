@@ -63,3 +63,9 @@ paper_trades/
 trade_history/
 *.sqlite
 *.db
+
+# Runtime data
+data/
+
+# Windows artifacts
+nul

@@ -74,8 +74,8 @@ def draw_bar(value: float, max_value: float, width: int = 20, filled: str = '#',
 
 def calculate_metrics(state: dict) -> dict:
     """Calculate all dashboard metrics."""
-    initial = state['initial_capital']
-    capital = state['capital']
+    initial = state.get('initial_capital', 75.0)  # Default to 75 if not present
+    capital = state.get('capital', initial)
     positions = state.get('positions', [])
     trades = state.get('closed_trades', [])
     
@@ -106,8 +106,11 @@ def calculate_metrics(state: dict) -> dict:
     current_dd = (state.get('high_water_mark', initial) - equity) / state.get('high_water_mark', initial) * 100
     
     # Time
-    start_time = datetime.fromisoformat(state.get('start_time', datetime.now().isoformat()))
-    running_time = datetime.now() - start_time
+    try:
+        start_time = datetime.fromisoformat(state.get('start_time', datetime.now().isoformat()))
+        running_time = datetime.now() - start_time
+    except:
+        running_time = timedelta(0)
     
     # Recent trades
     recent_trades = sorted(trades, key=lambda t: t.get('exit_time', ''), reverse=True)[:5]
@@ -229,15 +232,19 @@ def render_dashboard(state: dict):
 
 def main():
     parser = argparse.ArgumentParser(description="Paper Trading Dashboard")
-    parser.add_argument('--refresh', type=int, default=10, help='Refresh interval in seconds')
-    parser.add_argument('--state-file', type=str, default='./data/edge_aware_paper_state.json', 
+    parser.add_argument('--refresh', type=int, default=5, help='Refresh interval in seconds')
+    parser.add_argument('--state-file', type=str, default='./data/paper_trader_v2_state.json', 
                        help='Path to state file')
     
     args = parser.parse_args()
     state_file = Path(args.state_file)
     
     # Also check alternative state files
-    alt_state_file = Path('./data/paper_trading_state.json')
+    alt_state_files = [
+        Path('./data/paper_trader_v2_state.json'),
+        Path('./data/swing_trader_state.json'),
+        Path('./data/edge_aware_paper_state.json'),
+    ]
     
     print(f"Watching: {state_file}")
     print(f"Refresh: every {args.refresh} seconds")
@@ -247,10 +254,13 @@ def main():
         while True:
             clear_screen()
             
-            # Try primary state file, then alternative
+            # Try primary state file, then alternatives
             state = load_state(state_file)
             if not state:
-                state = load_state(alt_state_file)
+                for alt_file in alt_state_files:
+                    state = load_state(alt_file)
+                    if state:
+                        break
             
             render_dashboard(state)
             
