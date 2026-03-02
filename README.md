@@ -1,8 +1,20 @@
-# Polymarket HFT Trading Bot
+# polymarket_bot
 
-High-frequency trading bot for Polymarket prediction markets using sentiment analysis, regime detection, and microstructure-aware execution.
+Quantitative trading bot for Polymarket prediction markets. Regime detection, Kelly criterion sizing, and Monte Carlo validation — 16,717 lines of Python.
 
-**Designed for small bankrolls ($50-100) with 15%+ weekly return target.**
+## Why
+
+I wanted to understand how to make decisions when you can't be sure you're right. Not in the abstract — I wanted a domain where being wrong costs you something immediately.
+
+Prediction markets are a clean sandbox for this. Binary outcomes, real-time prices, and the market is full of other people trying to exploit the same signals you are. If your model is miscalibrated, you find out fast.
+
+The core of the system is regime detection — classifying market states as trending, news-driven, volatile, or trap before deciding whether to trade. The "trap" classification is the most important one: when price movement and sentiment contradict each other, the correct action is to do nothing. Knowing when NOT to act turns out to be the hardest part of any autonomous decision system.
+
+Position sizing uses the Kelly criterion — the mathematically optimal bet size given your estimated edge and the odds. Kelly tells you to bet more when you're confident and less when you're not, which sounds obvious until you realize most trading systems use fixed position sizes regardless of conviction. The Kelly fraction is capped at 35% with a $15 max per position because the optimal strategy is only optimal if your edge estimate is correct, and it never is.
+
+Validation is where most trading projects fall apart. It's easy to backtest against historical data and find a strategy that would have worked. It's harder to test against scenarios that haven't happened yet. The benchmark suite runs 50 scenarios (25 normal market conditions + 25 edge cases), and the Monte Carlo simulator runs 1,000 independent deployment simulations with realistic cost modeling — 2% profit fees, 0.8% spread, 0.3% slippage.
+
+All data sources are free. The bot doesn't need your money to run — only your curiosity about how decisions work.
 
 ## Performance Results
 
@@ -41,7 +53,7 @@ The bot uses regime detection and adaptive positioning:
 ## Installation
 
 ```bash
-git clone https://github.com/yourusername/polymarket_bot.git
+git clone https://github.com/Cuuper22/polymarket_bot.git
 cd polymarket_bot
 pip install -r requirements.txt
 ```
@@ -155,7 +167,7 @@ polymarket_bot/
 │   │   ├── edge_detector.py        # Signal generation
 │   │   └── position_sizer.py       # Kelly criterion
 │   ├── backtesting/
-│   │   ├── benchmark_suite.py      # 50 HFT scenarios
+│   │   ├── benchmark_suite.py      # 50 trading scenarios
 │   │   ├── microstructure_backtest.py  # Realistic costs
 │   │   └── deployment_simulator.py # Monte Carlo sim
 │   └── trading/
