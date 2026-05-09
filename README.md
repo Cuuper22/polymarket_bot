@@ -3,6 +3,7 @@
 Quantitative trading bot for prediction markets. Regime detection, Kelly criterion sizing, Monte Carlo validation.
 
 > **All results are from simulated market scenarios.** The value is the decision framework, regime detection, position sizing, and validation methodology, not the returns. See [methodology](#validation).
+> **Status:** Research and paper-trading project. No live-money performance history; not financial advice.
 
 ![Python](https://img.shields.io/badge/python-3.x-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)

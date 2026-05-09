@@ -3,6 +3,8 @@
 **Date**: 2026-01-18  
 **Target**: 15%+ weekly returns with consistent performance
 
+**Scope**: All results below are simulated benchmark/deployment scenarios. They are useful for inspecting the decision framework and risk controls, not for claiming expected live returns. No random-entry or buy-and-hold baseline is included yet.
+
 ---
 
 ## Executive Summary
@@ -16,7 +18,7 @@
 | **Win Rate** | **62.7%** | >55% |
 | **Max Drawdown (avg)** | **29.7%** | <35% |
 
-**TARGET ACHIEVED** - Strategy consistently delivers 15%+ weekly returns in realistic deployment conditions.
+**SIMULATION TARGET ACHIEVED** - The strategy reaches the target inside the benchmark harness. This is not evidence of live-trading performance.
 
 ---
 
@@ -161,7 +163,7 @@ The strategy includes optional Claude Haiku integration for enhanced sentiment a
 # Set in .env file
 ANTHROPIC_API_KEY=your_key_here
 
-# Expected improvement with Claude:
+# Planning assumption for Claude, not a live result:
 # - Win rate: +5-8% (62% -> 67-70%)
 # - Weekly return: +3-5%
 # - Cost: ~$15/month for API calls
